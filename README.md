@@ -5,16 +5,13 @@ Steps Required to Run Car Detection GUI
 1. Install all the requirements to run Flask based web server
    pip3 install -r requirements.txt
 
-2. Download weights file the drive link (https://drive.google.com/file/d/1P3m57eoAopdSGX09TqGmhAtKxw7igUW3/view?usp=sharing)
-   and place it in yolo-stanfordcar-data folder
-   (As weights file in 240 mb github is not allowing to host it)
 
-3. Start the Flask web server by running
+2. Start the Flask web server by running
    python3 detect-flask.py
 
    Go to the URL : http://localhost:8090
 
-4. ![image](https://user-images.githubusercontent.com/11522867/164389365-222fbafe-d95d-4bb7-882c-234238a98964.png)
+3. ![image](https://user-images.githubusercontent.com/11522867/164389365-222fbafe-d95d-4bb7-882c-234238a98964.png)
     From the screenshot press Choose file and select any image from test folder
     For images selected from test folder its class will be displayed but for new images class will be shown as N/A
     Press Predict when image is selected
