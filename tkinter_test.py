@@ -30,8 +30,8 @@ entryText = tk.StringVar()
 found = Entry(root, textvariable=entryText)
 found.grid(row=0, column=4)
 regressiondf = None
-full_path_to_csv = './Annotations/Test Annotation.csv'
-full_path_to_images = './'
+full_path_to_csv = '/Users/pribhask/priyeshproj/capstone/Annotations/Test Annotation.csv'
+full_path_to_images = '/Users/pribhask/priyeshproj/YOLO-3-OpenCV/'
 
 
 
@@ -136,11 +136,11 @@ def loadData():
         entryText.set("Folder Not Found")
 
 def starttraining():
-    path_to_output_file = './yolotrainingoutput.txt'
+    path_to_output_file = '/Users/pribhask/priyeshproj/darknet/myoutput_a.txt'
     myoutput = open(path_to_output_file, 'w+')
     trainingstatus.set(f"Training Started . Please check file {path_to_output_file}")
     time.sleep(10)
-    session = subprocess.Popen(['./test.sh'], stdout=myoutput, stderr=myoutput, universal_newlines=True)
+    session = subprocess.Popen(['/Users/pribhask/priyeshproj/darknet/tesh.sh'], stdout=myoutput, stderr=myoutput, universal_newlines=True)
     trainingstatus.set(f"Training Started . Please check file {path_to_output_file}")
     output, errors = session.communicate()
 
@@ -159,5 +159,119 @@ tbbutton.grid(row=1, column=1)
 trainingstatus = tk.StringVar()
 trainingstatusLabel = Entry(root, textvariable=trainingstatus)
 trainingstatusLabel.grid(row=1, column=4)
+
+# fileName = Label(root, text="Step 2: Target Column:")
+# fileName.grid(row=1, column=0)
+# entryTargetColumn = Entry(root, width=12)
+# entryTargetColumn.grid(row=1, column=1)
+# entryTextTarget = tk.StringVar()
+# foundTarget = Entry(root, textvariable=entryTextTarget)
+# foundTarget.grid(row=1, column=4)
+#
+#
+# def checkifTargetColumnExists():
+#     if entryTargetColumn.get() in regressiondf.columns:
+#
+#         entryTextTarget.set("Found")
+#     else:
+#         entryTextTarget.set("Not Found")
+#
+#
+# buttonImport = Button(root, text="Import Target", command=checkifTargetColumnExists)
+# buttonImport.grid(row=1, column=2)
+#
+# fileName = Label(root, text="Step 3: Neural Network Regressor:")
+# fileName.grid(row=2, column=0)
+#
+# regression = Label(root, text="Regression:")
+# regression.grid(row=3, column=0, sticky=tk.E)
+#
+#
+# def trainRegression():
+#     global modeltuned
+#     featuresdf = regressiondf.drop("Signal_Strength", axis=1)
+#     labelsdf = regressiondf['Signal_Strength']
+#     featuresdf = featuresdf.apply(zscore)
+#     X_train, X_test, y_train, y_test = train_test_split(featuresdf, labelsdf, test_size=0.2, random_state=7)
+#     modeltuned = Sequential()
+#     modeltuned.add(tf.keras.layers.BatchNormalization(input_shape=(11,)))
+#     modeltuned.add(Dense(50, input_dim=11, kernel_initializer='normal', activation='relu'))
+#     modeltuned.add(Dense(25, input_dim=11, kernel_initializer='normal', activation='relu'))
+#     modeltuned.add(Dense(1, kernel_initializer='normal'))
+#     # Compile model
+#     modeltuned.compile(loss='mean_squared_error', optimizer='adam')
+#     modeltuned.fit(X_train, y_train, validation_split=0.30, epochs=100, batch_size=20)
+#     traintext = tk.StringVar()
+#     trainEntry = Entry(root, textvariable=traintext)
+#     trainEntry.grid(row=3, column=4)
+#     traintext.set("Network Trained")
+#
+#
+# def pickleRegression():
+#     modeltuned.save("./modeldeploy")
+#     traintext = tk.StringVar()
+#     trainEntry = Entry(root, textvariable=traintext)
+#     trainEntry.grid(row=4, column=4)
+#     traintext.set("Saved Model To Disk")
+#
+#
+# regressionbtton = Button(root, text="Train", command=trainRegression)
+# regressionbtton.grid(row=3, column=2)
+#
+# regressionpickle = Label(root, text="Pickle:")
+# regressionpickle.grid(row=4, column=0, sticky=tk.E)
+#
+# regressionpicklebtton = Button(root, text="Run", command=pickleRegression)
+# regressionpicklebtton.grid(row=4, column=2)
+#
+# ###### Classification
+#
+# classifiertext = Label(root, text="Step 3: Neural Network Regressor:")
+# classifiertext.grid(row=6, column=0)
+#
+# regression = Label(root, text="Classifier:")
+# regression.grid(row=7, column=0, sticky=tk.E)
+#
+#
+# def trainClassification():
+#     featuresdf = regressiondf.drop("Signal_Strength", axis=1)
+#     labelsdf = regressiondf['Signal_Strength']
+#     featuresdf = regressiondf.apply(zscore)
+#     X_train, X_test, y_train, y_test = train_test_split(featuresdf, labelsdf, test_size=0.2, random_state=7)
+#     y_train = to_categorical(y_train)
+#     y_test = to_categorical(y_test)
+#     global modelclass
+#     modelclass = Sequential()
+#     modelclass.add(Dense(128, kernel_initializer='normal', input_dim=X_train.shape[1], activation='relu'))
+#     modelclass.add(Dense(64, kernel_initializer='normal', activation='relu'))
+#     modelclass.add(Dense(32, kernel_initializer='normal', activation='relu'))
+#     modelclass.add(Dense(16, kernel_initializer='normal', activation='relu'))
+#     # Op layer
+#     modelclass.add(Dense(9, kernel_initializer='normal', activation='softmax'))
+#     modelclass.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+#     modelclass.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=200, batch_size=20)
+#     traintext = tk.StringVar()
+#     trainEntry = Entry(root, textvariable=traintext)
+#     trainEntry.grid(row=7, column=4)
+#     traintext.set("Network Trained")
+#
+#
+# classifierbtton = Button(root, text="Train", command=trainClassification)
+# classifierbtton.grid(row=7, column=2)
+#
+# classificationpickle = Label(root, text="Pickle:")
+# classificationpickle.grid(row=8, column=0, sticky=tk.E)
+#
+#
+# def pickleClassification():
+#     modelclass.save("./modeldeploy")
+#     traintext = tk.StringVar()
+#     trainEntry = Entry(root, textvariable=traintext)
+#     trainEntry.grid(row=8, column=4)
+#     traintext.set("Saved Model To Disk")
+#
+#
+# classificationpicklebtton = Button(root, text="Run", command=pickleClassification)
+# classificationpicklebtton.grid(row=8, column=2)
 
 root.mainloop()
