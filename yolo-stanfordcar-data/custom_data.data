@@ -1,5 +1,5 @@
 classes = 196
-train = /content/drive/My Drive/cardata/cars_train/train_colab.txt
-valid = /content/drive/My Drive/cardata/cars_train/test_colab.txt
-names = /content/drive/My Drive/cardata/cars_train/classes.names
+train = /Users/pribhask/capstonefinal/computervisionCv2/train.txt
+valid = /Users/pribhask/capstonefinal/computervisionCv2/test.txt
+names = /Users/pribhask/capstonefinal/computervisionCv2/yolo-stanfordcar-data/classes.names
 backup = backup

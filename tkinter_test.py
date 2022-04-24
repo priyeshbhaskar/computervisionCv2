@@ -5,6 +5,7 @@ import PIL.Image
 import subprocess
 from subprocess import Popen, PIPE
 import time
+from pathlib import Path
 
 
 from tkinter import *
@@ -31,11 +32,11 @@ found = Entry(root, textvariable=entryText)
 found.grid(row=0, column=4)
 regressiondf = None
 full_path_to_csv = './Annotations/Test Annotation.csv'
-full_path_to_images = './'
+full_path_to_images=  os.path.dirname(os.path.abspath(__file__))
 
 
 
-def preparetrainAndValidationFile():
+def preparetrainAndValidationFile(folder):
     p = []
     for current_dir, dirs, files in os.walk('.'):
         # Going through all files
@@ -48,7 +49,7 @@ def preparetrainAndValidationFile():
                 # this: + '/' +
                 # to this: + '\' +
                 # or to this: + '\\' +
-                path_to_save_into_txt_files = full_path_to_images + '/' + f
+                path_to_save_into_txt_files = folder + '/' + f
 
                 # Appending the line into the list
                 # We use here '\n' to move to the next line
@@ -56,24 +57,43 @@ def preparetrainAndValidationFile():
                 p.append(path_to_save_into_txt_files + '\n')
     p_test = p[:int(len(p) * 0.15)]
     p = p[int(len(p) * 0.15):]
-    with open('train.txt', 'w') as train_txt:
+
+    with open(f'{full_path_to_images}/train.txt', 'w') as train_txt:
         # Going through all elements of the list
         for e in p:
             # Writing current path at the end of the file
             train_txt.write(e)
-    with open('test.txt', 'w') as test_txt:
+    with open(f'{full_path_to_images}/valid.txt', 'w') as test_txt:
         # Going through all elements of the list
         for e in p_test:
             # Writing current path at the end of the file
             test_txt.write(e)
-    pass
+    with open(full_path_to_images + '/yolo-stanfordcar-data/' + 'custom_data.data', 'w') as data:
+        # Writing needed 5 lines
+        # Number of classes
+        # By using '\n' we move to the next line
+        data.write('classes = ' + '196' + '\n')
+
+        # Location of the train.txt file
+        data.write('train = ' + full_path_to_images + '/' + 'train.txt' + '\n')
+
+        # Location of the test.txt file
+        data.write('valid = ' + full_path_to_images + '/' + 'test.txt' + '\n')
+
+        # Location of the classes.names file
+        data.write('names = ' + full_path_to_images + '/yolo-stanfordcar-data/' + 'classes.names' + '\n')
+
+        # Location where to save weights
+        data.write('backup = backup')
+
 
 
 #Train on simple darknet c library whic
 # Cpu , opencv
 
 def preprocessyolov3Data(folder):
-    labelscsv = "/Users/pribhask/priyeshproj/capstone/Car names and make.csv"
+
+    labelscsv = "./Car names and make.csv"
     labelsdf = pd.read_csv(labelscsv)
     labels = list(labelsdf['Class Name'])
     annotations = pd.read_csv(full_path_to_csv,usecols=['Image Name','x0','y0','x1','y1','Image class'])
@@ -86,8 +106,8 @@ def preprocessyolov3Data(folder):
     sub_ann['width'] = sub_ann['x1'] - sub_ann['x0']
     sub_ann['height'] = sub_ann['y1'] - sub_ann['y0']
     r = sub_ann.loc[:, ['Image Name','Image class','center x','center y','width','height']].copy()
-    full_path_to_image=full_path_to_images+folder
-    os.chdir(full_path_to_image)
+
+    os.chdir(folder)
     for current_dir, dirs, files in os.walk('.'):
         # Going through all files
         for f in files:
@@ -120,27 +140,27 @@ def preprocessyolov3Data(folder):
                 resulted_frame['center y'] = resulted_frame['center y'] / img.height
                 resulted_frame['width'] = resulted_frame['width'] / img.width
                 resulted_frame['height'] = resulted_frame['height'] / img.height
-                path_to_save = full_path_to_image + '/' + f[:5] + '.txt'
+                path_to_save = folder + '/' + f[:5] + '.txt'
                 resulted_frame.to_csv(path_to_save, header=False, index=False, sep=' ')
 
-    preparetrainAndValidationFile()
+    preparetrainAndValidationFile(folder)
     pass
 
 def loadData():
-    folder=full_path_to_images+e.get()
+    folder=os.path.dirname(os.path.abspath(__file__))+"/"+e.get()
     if os.path.isdir(folder):
-        preprocessyolov3Data(e.get())
+        preprocessyolov3Data(folder)
         entryText.set("Input Preprocessing Complete")
 
     else:
         entryText.set("Folder Not Found")
 
 def starttraining():
-    path_to_output_file = './yolotrainingoutput.txt'
+    path_to_output_file = f'{full_path_to_images}/myoutput_a.txt'
     myoutput = open(path_to_output_file, 'w+')
     trainingstatus.set(f"Training Started . Please check file {path_to_output_file}")
     time.sleep(10)
-    session = subprocess.Popen(['./test.sh'], stdout=myoutput, stderr=myoutput, universal_newlines=True)
+    session = subprocess.Popen([f'{full_path_to_images}/test.sh'], stdout=myoutput, stderr=myoutput, universal_newlines=True)
     trainingstatus.set(f"Training Started . Please check file {path_to_output_file}")
     output, errors = session.communicate()
 
